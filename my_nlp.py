@@ -9,6 +9,10 @@ class my_nlp:
                alist.append(string);
           return alist
           
+               
+               
+
+     
      def My_NLP():
 
           file = open("Sample.txt", "r") 
@@ -17,9 +21,8 @@ class my_nlp:
           word_token = nltk.word_tokenize(read_file)
           word_series = pandas.Series(word_token)
           a=len(word_series)
-          #test_call= a.test(a);
-          table = pandas.DataFrame(word_series, index = a.test(a))
-          #print(table)
+          table = pandas.DataFrame(word_series, index = [x for x in range(a+1)])
+          print(table)
           word_pos = nltk.pos_tag(word_token)
           
           #cnt = count(word_pos)
@@ -39,5 +42,3 @@ class my_nlp:
 
 
 my_nlp.My_NLP()
-
-     
