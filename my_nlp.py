@@ -34,28 +34,26 @@ class my_nlp:
                newposlist.append(pos)
           for t in newposlist:
                print(t)
-
-               
-               '''newtag = ''
+               newtag = ''
                if t == 'NN':
                     newtag = 'n'
                elif t == 'JJ':
                     newtag = 'a'
-               elif t == 'V':
+               '''elif t == 'V':
                     newtag = 'v'
                elif t == 'R':
                     newtag = 'r'
                else:
-                    newtag = ''
+                    newtag = '''''
                newtaglist.append(newtag)
           #print(newtaglist)
                
-          word_freq = nltk.FreqDist(newposlist)
+          '''word_freq = nltk.FreqDist(newposlist)
           word_features = list(word_freq.keys())''' 
           
           data={'Words':newwordlist,'POS':newposlist,'NewTag':newtaglist}
           table = pandas.DataFrame(data, index = self.test(a))
-          #print(table)
+          print(table)
 
           #classifier = NaiveBayesClassifier.train(cleanString)    #classifier()
           
