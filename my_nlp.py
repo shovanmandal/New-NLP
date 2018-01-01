@@ -1,10 +1,26 @@
 import nltk
 import pandas
 import re
+import PyPDF2
 from nltk.corpus import wordnet
 from nltk.corpus import sentiwordnet as swn
 
 class my_nlp:
+
+     def file_open(self):
+
+          pdf_file = open('aan.pdf','rb')                        #Reading PDF file
+          read_pdf = PyPDF2.PdfFileReader(pdf_file)
+          number_of_pages = read_pdf.getNumPages()
+          page = read_pdf.getPage(0)
+          page_content = page.extractText()                      
+
+          #file = open("Sample.txt", "r")                        # Reading Text file
+          #read_file = file.read()
+          
+          cleanString = re.sub('\W+',' ', page_content )            #cleanse the unwanted expressions
+          cleanString = cleanString.lower()
+          return cleanString
 
      def excel_DATA_manipulation(self):                     ########################
 
@@ -38,12 +54,8 @@ class my_nlp:
           return alist
      
      def My_NLP(self):
-          
-          file = open("Sample.txt", "r") 
-          read_file = file.read()
-          cleanString = re.sub('\W+',' ', read_file )            #cleanse the unwanted expressions
-          
-          word_token = nltk.word_tokenize(cleanString.lower())           #Word tokenization
+                    
+          word_token = nltk.word_tokenize(self.file_open())           #Word tokenization
           word_series = pandas.Series(word_token)
           a=len(word_series)
           word_pos = nltk.pos_tag(word_token)                    #POS Tagging
@@ -62,13 +74,14 @@ class my_nlp:
                     if t == i:
                          newtaglist.append(j)
           NewSentimetDict = dict(zip(newwordlist,newtaglist))
-          
           return NewSentimetDict
      
 
      def Sentiment_Scores(self):
 
           scorelist= []
+          wordlist = []
+          taglist = []
 
           for i,j in self.My_NLP().items():
                if(j!= '0'):
@@ -79,27 +92,26 @@ class my_nlp:
                          for syn in synsets:
                               score+=syn.pos_score() - syn.neg_score()
                          scorelist.append(score/len(synsets))
-
-          return scorelist
+                         wordlist.append(i)
+                         taglist.append(j)
+                         
+          data = {'Scores':scorelist, 'Tags':taglist, 'Words':wordlist}
+          return data
 
      def Visualization(self):
-
-          wordlist= []
-          taglist = []
-          scorelist = self.Sentiment_Scores()
-
-          for i,j in self.My_NLP().items():
-               if(j!= '0'):
-                    wordlist.append(i)
-                    taglist.append(j)
-          data = {'Scores':scorelist, 'Tags':taglist, 'Words':wordlist}
-          table = pandas.DataFrame(data,index= self.test(len(wordlist)))
+          lenth = []
+          for key,val in self.Sentiment_Scores().items():
+               lenth.append(len(val))
+               
+          table = pandas.DataFrame(self.Sentiment_Scores(),index=self.test(lenth[0]))
           print(table)
                
           
-
 a = my_nlp()
+
 a.Visualization()
-#.Sentiment_Scores()
+
+#a.file_open()
 #a.My_NLP()
+#a.Sentiment_Scores()
 #(a.excel_DATA_manipulation())
