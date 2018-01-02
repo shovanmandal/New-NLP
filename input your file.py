@@ -1,6 +1,10 @@
 import PyPDF2
 import re
 import docx
+import docx2txt
+
+my_text = docx2txt.process("sample.docx")    ## Doc file reading in string
+print(type(my_text))
 
 
 f= open('sample.docx','rb')
