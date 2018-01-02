@@ -7,19 +7,27 @@ from nltk.corpus import sentiwordnet as swn
 
 class my_nlp:
 
+     insert_file = input('Pease insert the file name:')
+
      def file_open(self):
 
-          pdf_file = open('aan.pdf','rb')                        #Reading PDF file
-          read_pdf = PyPDF2.PdfFileReader(pdf_file)
-          number_of_pages = read_pdf.getNumPages()
-          page = read_pdf.getPage(0)
-          page_content = page.extractText()                      
+          file_content = ''
+          file_name = my_nlp.insert_file
 
-          #file = open("Sample.txt", "r")                        # Reading Text file
-          #read_file = file.read()
-          
-          cleanString = re.sub('\W+',' ', page_content )            #cleanse the unwanted expressions
+          if file_name.endswith('.pdf'):
+               pdf_file = open(file_name,'rb')                        #Reading PDF file
+               read_pdf = PyPDF2.PdfFileReader(pdf_file)
+               number_of_pages = read_pdf.getNumPages()
+               page = read_pdf.getPage(0)
+               file_content = page.extractText()
+
+          elif file_name.endswith('.txt'):
+               file = open(file_name, "r")                        # Reading Text file
+               file_content = file.read()
+
+          cleanString = re.sub('\W+',' ', file_content )            #cleanse the unwanted expressions
           cleanString = cleanString.lower()
+          #print(cleanString)
           return cleanString
 
      def excel_DATA_manipulation(self):                     ########################
@@ -64,7 +72,6 @@ class my_nlp:
           newwordlist = []
           newposlist = []
           newtaglist = []
-          #scorelist = []
           for word,pos in word_pos:                              #creating dictionary and List...
                newdict.update({word : pos})                      #with tokenized word and...
                newwordlist.append(word)                            #tagged POS
@@ -86,7 +93,6 @@ class my_nlp:
           for i,j in self.My_NLP().items():
                if(j!= '0'):
                     synsets = list(swn.senti_synsets(i,j))
-                    #print(synsets)
                     score = 0
                     if(len(synsets)>0):
                          for syn in synsets:
